@@ -1,5 +1,3 @@
-var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-
 var apiKey = "19de7cc27a0d4e69bd2724a55ff3ffee",
     query,
     beginDate,
@@ -7,13 +5,24 @@ var apiKey = "19de7cc27a0d4e69bd2724a55ff3ffee",
     page;
 
 var testurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-testurl += '?' + $.param({
+var param = $.param({
     'api-key': "19de7cc27a0d4e69bd2724a55ff3ffee",
     'q': "trump",
-    'begin_date': beginDate,
-    'end_date': endDate,
+    'end_date': "",
+    'begin_date': "",
     'page': 5
 });
+
+function isEmpty(value) {
+    return value == null || value == "";
+}
+
+for (key in testurl)
+    if (isEmpty(testurl[key]))
+        delete testurl[key];
+
+
+testurl += '?' + param;
 
 $.ajax({
     url: testurl,
@@ -27,8 +36,11 @@ $.ajax({
     throw err;
 });
 
-// -------------------------------
 
+
+
+// -------------------------------
+var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 
 function urlBuilder() {
     url += '?' + $.param({
