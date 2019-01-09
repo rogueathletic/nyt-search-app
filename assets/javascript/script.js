@@ -1,31 +1,39 @@
+var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+
 var apiKey = "19de7cc27a0d4e69bd2724a55ff3ffee",
     query,
     beginDate,
     endDate,
     page;
 
-var testurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-var param = $.param({
-    'api-key': "19de7cc27a0d4e69bd2724a55ff3ffee",
-    'q': "trump",
-    'end_date': "",
-    'begin_date': "",
-    'page': 5
-});
+var param = {
+    'api-key': apiKey,
+    'q': query,
+    'end_date': beginDate,
+    'begin_date': endDate,
+    'page': page
+};
 
 function isEmpty(value) {
     return value == null || value == "";
 }
 
-for (key in testurl)
-    if (isEmpty(testurl[key]))
-        delete testurl[key];
+function urlBuilder() {
+    for (key in param)
+        if (isEmpty(param[key]))
+            delete param[key];
+    return url += '?' + $.param(param);
+}
 
+$('#searchTextBox').on('keypress', function (e) {
+    if (e.which == 13) {
 
-testurl += '?' + param;
+        console.log("asd");
+    }
+});
 
 $.ajax({
-    url: testurl,
+    url: urlBuilder(),
     method: 'GET',
 }).done(function (result) {
     console.log(result);
@@ -36,22 +44,3 @@ $.ajax({
     throw err;
 });
 
-
-
-
-// -------------------------------
-var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-
-function urlBuilder() {
-    url += '?' + $.param({
-        'api-key': apiKey,
-        'q': query,
-        'begin_date': beginDate,
-        'end_date': endDate,
-        'page': page
-    });
-}
-
-$('<button>').on("click", function () {
-
-});
