@@ -26,8 +26,7 @@ function urlBuilder(param) {
             delete param[key];
         }
     }
-    console.log("the link");
-    console.log(url += '?' + $.param(param));
+
     url += '?' + $.param(param);
     return url;
 }
@@ -35,19 +34,30 @@ function urlBuilder(param) {
 function showDataOnScreen(response) {
     console.log(response);
     for (i in response.docs) {
-        var header = $("<h1>");
+        var header = $("<h5>");
         var article = $("<p>");
         var link = $("<a>");
         var container = $("<div>");
+        var wrapper = $("<div>");
 
         header.text(response.docs[i].headline.main);
+        header.addClass("card-title");
+
         article.text(response.docs[i].snippet);
-        link.text(response.docs[i].web_url);
+        article.addClass("card-text");
+
+        link.text("Read Article");
         link.attr("href", response.docs[i].web_url);
+        link.attr("target", "_blank");
+        link.addClass("btn btn-primary");
 
         container.append(header, article, link);
+        container.addClass("card-body");
 
-        $("#articles").append(container);
+        wrapper.append(container);
+        wrapper.addClass("card mb-3");
+
+        $("#articles").append(wrapper);
     }
 }
 
@@ -57,11 +67,10 @@ function ajaxCall(param) {
     $.ajax({
         url: urlBuilder(param),
         method: 'GET',
-    }).done(function (result) {
-        console.log("Res below");
-        console.log(result);
-        console.log(result.response.docs[0].web_url);
-        console.log(result.response.docs[0].snippet);
+    }).then(function (result) {
+        console.log("This is the object" + result);
+        console.log("This is the link" + result.response.docs[0].web_url);
+        console.log("Snippet Article" + result.response.docs[0].snippet);
         showDataOnScreen(result.response);
     }).fail(function (err) {
         console.log("Error: " + err);
@@ -97,20 +106,7 @@ $('#searchBTN').on('click', function () {
     console.log(endDate + " type is " + typeof endDate);
     console.log(page + " type is " + typeof page);
 
+    ajaxCall(param);
 
-    // API Call
-    $.ajax({
-        url: urlBuilder(param),
-        method: 'GET',
-    }).then(function (result) {
-        console.log("Res below");
-        console.log(result);
-        console.log(result.response.docs[0].web_url);
-        console.log(result.response.docs[0].snippet);
-        showDataOnScreen(result.response);
-    }).fail(function (err) {
-        console.log("Error: " + err);
-        throw err;
-    });
 
 });
